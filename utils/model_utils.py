@@ -65,8 +65,9 @@ class ModelManager:
         
         self.model = joblib.load(model_path)
         self.vectorizer = joblib.load(vectorizer_path)
-        print(f"✅ Model loaded from: {model_path}")
-        print(f"✅ Vectorizer loaded from: {vectorizer_path}")
+        # Use ASCII-safe output to avoid UnicodeEncodeError on Windows
+        print(f"[OK] Model loaded from: {model_path}")
+        print(f"[OK] Vectorizer loaded from: {vectorizer_path}")
     
     def save(self, model, vectorizer, model_path: str, vectorizer_path: str):
         """
@@ -91,8 +92,8 @@ class ModelManager:
         self.model = model
         self.vectorizer = vectorizer
         
-        print(f"💾 Model saved to: {model_path}")
-        print(f"💾 Vectorizer saved to: {vectorizer_path}")
+        print(f"[SAVED] Model saved to: {model_path}")
+        print(f"[SAVED] Vectorizer saved to: {vectorizer_path}")
     
     def predict(self, text: str) -> dict:
         """

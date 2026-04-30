@@ -1,0 +1,14 @@
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
+
+[client]
+showSidebarNavigation = false
+
+[theme]
+primaryColor = "#00D4FF"
+backgroundColor = "#050510"
+secondaryBackgroundColor = "#0A0A1A"
+textColor = "#FFFFFF"

@@ -1,0 +1,4 @@
+timestamp,text,prediction,confidence,spam_probability,source
+2026-04-30T15:31:59.505808,URGENT: Your bank account has been compromised. Click link to verify your account now http://fake-bank-login.com/verify,Spam,0.734,0.734,single
+2026-04-30T16:53:37.809692,FREE iPhone giveaway! Click here to win NOW http://scam-prize.com,Spam,0.9321,0.9321,single
+2026-04-30T17:01:53.694320,URGENT! You won $50000! Call NOW 1-800-FREE and claim your prize! Visit http://free-money-win.com,Spam,0.9995,0.9995,single
