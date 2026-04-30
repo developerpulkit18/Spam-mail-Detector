@@ -22,7 +22,7 @@ st.set_page_config(
     page_title="Spam Mail & Threat Intelligence System",
     page_icon="🛡️",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # Inject global CSS + star background
