@@ -22,7 +22,7 @@ st.set_page_config(
     page_title="Spam Mail & Threat Intelligence System",
     page_icon="🛡️",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # Inject global CSS + star background
@@ -30,35 +30,34 @@ inject_css(st)
 inject_stars_and_glow(st)
 
 # ─── Force sidebar open via JS ──────────────────────────────────────────────
-# This JS runs once per page load. It checks if the sidebar is collapsed
-# and, if so, clicks the native Streamlit toggle button to expand it.
-# It also creates a visible MENU button in the parent DOM as a fallback.
+# This JS continuously enforces the sidebar to stay expanded using a MutationObserver
 import streamlit.components.v1 as components
 components.html("""
 <script>
 (function() {
     var p = window.parent.document;
 
-    // --- 1. Force-open sidebar on page load ---
     function forceOpen() {
         var sb = p.querySelector('[data-testid="stSidebar"]');
-        if (sb && sb.getAttribute('aria-expanded') !== 'true') {
-            // Try clicking the native toggle
+        if (!sb) return;
+        if (sb.getAttribute('aria-expanded') !== 'true') {
+            // Force React state by clicking
             var toggle = p.querySelector('[data-testid="stSidebarCollapsedControl"] button')
-                      || p.querySelector('button[aria-label="Open sidebar"]');
+                      || p.querySelector('button[aria-label="Open sidebar"]')
+                      || p.querySelector('button[kind="header"]');
             if (toggle) {
                 toggle.click();
-                return;
             }
-            // Fallback: directly set styles to force sidebar visible
+            // CSS Fallbacks
             sb.setAttribute('aria-expanded', 'true');
             sb.style.width = '300px';
             sb.style.minWidth = '300px';
             sb.style.transform = 'none';
             sb.style.marginLeft = '0';
-            // Also show the sidebar content div
-            var inner = sb.querySelector('[data-testid="stSidebarContent"]')
-                     || sb.firstElementChild;
+            sb.style.visibility = 'visible';
+            sb.style.position = 'relative';
+            
+            var inner = sb.querySelector('[data-testid="stSidebarContent"]') || sb.firstElementChild;
             if (inner) {
                 inner.style.width = '300px';
                 inner.style.opacity = '1';
@@ -66,54 +65,32 @@ components.html("""
             }
         }
     }
+
     forceOpen();
-    // Retry a few times (Streamlit renders async)
-    setTimeout(forceOpen, 300);
-    setTimeout(forceOpen, 800);
-    setTimeout(forceOpen, 1500);
+    setInterval(forceOpen, 300); // Polling as fallback
 
-    // --- 2. Inject floating MENU button as fallback ---
-    if (!p.getElementById('ariaMenuBtn')) {
-        var btn = p.createElement('div');
-        btn.id = 'ariaMenuBtn';
-        btn.innerHTML = '<span style="font-size:1.5rem;line-height:1;">&#9776;</span>'
-                      + '<span style="font-size:0.55rem;letter-spacing:2px;">MENU</span>';
-        btn.style.cssText =
-            'position:fixed;left:14px;top:50%;transform:translateY(-50%);z-index:999998;' +
-            'background:linear-gradient(135deg,rgba(0,212,255,0.22),rgba(123,47,255,0.22));' +
-            'border:2px solid rgba(0,212,255,0.45);border-radius:14px;padding:12px 14px;' +
-            'cursor:pointer;color:#00D4FF;font-family:Orbitron,monospace;font-weight:700;' +
-            'letter-spacing:1px;backdrop-filter:blur(12px);' +
-            'box-shadow:0 0 22px rgba(0,212,255,0.18);transition:all 0.3s ease;' +
-            'display:flex;flex-direction:column;align-items:center;gap:5px;opacity:0;pointer-events:none;';
-
-        btn.onmouseenter = function() {
-            btn.style.background = 'linear-gradient(135deg,rgba(0,212,255,0.4),rgba(123,47,255,0.4))';
-            btn.style.boxShadow = '0 0 35px rgba(0,212,255,0.4)';
-        };
-        btn.onmouseleave = function() {
-            btn.style.background = 'linear-gradient(135deg,rgba(0,212,255,0.22),rgba(123,47,255,0.22))';
-            btn.style.boxShadow = '0 0 22px rgba(0,212,255,0.18)';
-        };
-        btn.onclick = function() {
-            forceOpen();
-        };
-        p.body.appendChild(btn);
-
-        // Show/hide based on sidebar state
-        setInterval(function() {
-            var sb = p.querySelector('[data-testid="stSidebar"]');
-            if (!sb) return;
-            var expanded = sb.getAttribute('aria-expanded');
-            if (expanded === 'true') {
-                btn.style.opacity = '0';
-                btn.style.pointerEvents = 'none';
-            } else {
-                btn.style.opacity = '1';
-                btn.style.pointerEvents = 'auto';
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'aria-expanded') {
+                forceOpen();
             }
-        }, 400);
+        });
+    });
+
+    function setupObserver() {
+        var sb = p.querySelector('[data-testid="stSidebar"]');
+        if (sb) {
+            observer.observe(sb, { attributes: true });
+        } else {
+            setTimeout(setupObserver, 500);
+        }
     }
+    setupObserver();
+    
+    // Remove the old floating menu button if it exists
+    var oldBtn = p.getElementById('ariaMenuBtn');
+    if (oldBtn) oldBtn.remove();
+
 })();
 </script>
 """, height=0)
@@ -206,7 +183,7 @@ with st.sidebar:
     # Credits
     st.markdown("""
     <div style="text-align:center;padding:0.3rem 0;">
-        <p style="color:#555;font-size:0.7rem;">
+        <p style="color:#FFF;font-size:0.7rem;">
             Made with ❤️ by
             <span style="color:#00D4FF;">Pulkit</span>,
             <span style="color:#7B2FFF;">Raushan</span>,

@@ -38,10 +38,17 @@ def inject_css(st):
     header[data-testid="stHeader"] { background: transparent !important; }
     .stApp > header { background: transparent !important; }
     /* ── Sidebar panel ── FORCE ALWAYS VISIBLE ── */
-    /* ── Sidebar panel ── */
     [data-testid="stSidebar"] {
         background: #0A0A1A !important;
         border-right: 1px solid rgba(0,212,255,0.12) !important;
+        min-width: 300px !important;
+        max-width: 300px !important;
+        width: 300px !important;
+        transform: translateX(0px) !important;
+        margin-left: 0 !important;
+        visibility: visible !important;
+        display: block !important;
+        position: relative !important;
     }
     [data-testid="stSidebar"] > div:first-child {
         background: #0A0A1A !important;
@@ -465,86 +472,15 @@ def inject_css(st):
         font-family: 'Inter', sans-serif; letter-spacing: 0.5px;
     }
 
-    /* ═══════════════════ SIDEBAR TOGGLE — BIG & VISIBLE ═══════════════════ */
-    /* Native Streamlit collapsed-sidebar button */
-    [data-testid="stSidebarCollapsedControl"] {
-        top: 0.6rem !important;
-        left: 0.6rem !important;
-        z-index: 999999 !important;
-    }
-    [data-testid="stSidebarCollapsedControl"] button {
-        background: rgba(0,212,255,0.15) !important;
-        border: 2px solid rgba(0,212,255,0.4) !important;
-        border-radius: 12px !important;
-        padding: 0.6rem 0.7rem !important;
-        color: var(--primary) !important;
-        box-shadow: 0 0 15px rgba(0,212,255,0.2) !important;
-        transition: all 0.3s ease !important;
-    }
-    [data-testid="stSidebarCollapsedControl"] button:hover {
-        background: rgba(0,212,255,0.25) !important;
-        box-shadow: 0 0 25px rgba(0,212,255,0.4) !important;
-        transform: scale(1.1) !important;
-    }
-    [data-testid="stSidebarCollapsedControl"] button svg {
-        width: 22px !important;
-        height: 22px !important;
-        stroke: var(--primary) !important;
-    }
-    /* Native X close button inside sidebar */
-    [data-testid="stSidebar"] button[kind="header"],
-    [data-testid="stSidebar"] [data-testid="stSidebarNavCollapseIcon"],
-    [data-testid="stSidebarCollapseButton"] button {
-        color: var(--primary) !important;
-        background: rgba(0,212,255,0.08) !important;
-        border: 1px solid rgba(0,212,255,0.2) !important;
-        border-radius: 8px !important;
-    }
-
-    /* ── Custom floating menu button ── */
-    .floating-menu-btn {
-        position: fixed;
-        left: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 999998;
-        background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(123,47,255,0.2));
-        border: 2px solid rgba(0,212,255,0.4);
-        border-radius: 14px;
-        padding: 10px 12px;
-        cursor: pointer;
-        color: #00D4FF;
-        font-family: 'Orbitron', monospace;
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 1px;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 0 20px rgba(0,212,255,0.15);
-        transition: all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        writing-mode: horizontal-tb;
-    }
-    .floating-menu-btn:hover {
-        background: linear-gradient(135deg, rgba(0,212,255,0.35), rgba(123,47,255,0.35));
-        box-shadow: 0 0 30px rgba(0,212,255,0.35);
-        transform: translateY(-50%) scale(1.08);
-    }
-    .floating-menu-btn .hamburger {
-        font-size: 1.4rem;
-        line-height: 1;
-    }
-    .floating-menu-btn .menu-label {
-        font-size: 0.55rem;
-        letter-spacing: 2px;
-    }
-    /* Hide floating btn when sidebar is open */
-    [data-testid="stSidebar"][aria-expanded="true"] ~ .main .floating-menu-btn,
-    body:has([data-testid="stSidebar"][aria-expanded="true"]) .floating-menu-btn {
-        opacity: 0;
-        pointer-events: none;
+    /* ═══════════════════ SIDEBAR TOGGLES (HIDDEN) ═══════════════════ */
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="stSidebar"] button[kind="header"] {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     /* ═══════════════════ DATA ELEMENTS ═══════════════════ */
