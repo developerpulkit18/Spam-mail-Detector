@@ -38,25 +38,10 @@ def inject_css(st):
     header[data-testid="stHeader"] { background: transparent !important; }
     .stApp > header { background: transparent !important; }
     /* ── Sidebar panel ── FORCE ALWAYS VISIBLE ── */
+    /* ── Sidebar panel ── */
     [data-testid="stSidebar"] {
         background: #0A0A1A !important;
         border-right: 1px solid rgba(0,212,255,0.12) !important;
-        min-width: 280px !important;
-        width: 300px !important;
-        transform: none !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        margin-left: 0 !important;
-        transition: none !important;
-    }
-    [data-testid="stSidebar"][aria-expanded="false"] {
-        /* Override Streamlit's collapse: keep it visible */
-        transform: none !important;
-        width: 300px !important;
-        min-width: 280px !important;
-        margin-left: 0 !important;
-        visibility: visible !important;
-        display: block !important;
     }
     [data-testid="stSidebar"] > div:first-child {
         background: #0A0A1A !important;
